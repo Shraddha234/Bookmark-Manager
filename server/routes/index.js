@@ -23,7 +23,8 @@ router.put("/editfolder/:folderId", folderController.editFolder);
 //Delete folder routes
 router.delete("deletefolder/:folderId", folderController.deleteFolder);
 
-
+//search folder API using keyword
+router.get('/search',folderController.searchFolders)
 
 //LinkName create, edit, delete APIs 
 router.post('/link-names', linkNameController.addLinkName);
