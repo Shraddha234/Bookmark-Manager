@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const routes = require('./routes');
-
+const morgan = require('morgan')
 const Folder = require('./models/folderModel');
 const LinkName = require('./models/linkNameModel');
 const User = require('./models/userModel');

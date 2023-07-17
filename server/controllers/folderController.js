@@ -322,3 +322,17 @@ exports.deleteFolder = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete folder' });
   }
 };
+
+//search folder using keywords
+exports.searchFolders = async (req, res) => {
+  try {
+    const { keyword } = req.query;
+    const folders = await Folder.find({ name: { $regex: keyword, $options: 'i' } });
+    res.json(folders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error' });
+}
+};
+
+router.get('/search',folderController.searchFolders)
