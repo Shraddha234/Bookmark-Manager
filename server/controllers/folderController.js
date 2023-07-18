@@ -82,7 +82,7 @@ exports.deleteFolder = async (req, res) => {
 
 // SELECT a folder
 
- exports.selectFolder =  async (req, res) => {
+exports.selectFolder = async (req, res) => {
 
   try {
 
@@ -117,10 +117,10 @@ exports.deleteFolder = async (req, res) => {
 
   }
 
- };
+};
 
 
- // CANCEL SELECT on all folders
+// CANCEL SELECT on all folders
 
 exports.cancelFolder = async (req, res) => {
 
@@ -149,7 +149,7 @@ exports.cancelFolder = async (req, res) => {
 
   }
 
- };
+};
 
 
 // MOVE selected links to another folder
@@ -212,10 +212,10 @@ exports.moveFolder = async (req, res) => {
 
   }
 
- };
+};
 
 
- // DELETE selected folders
+// DELETE selected folders
 
 exports.deleteSelectFolder = async (req, res) => {
 
@@ -233,7 +233,7 @@ exports.deleteSelectFolder = async (req, res) => {
 
       const folderIds = folderId[0];
 
-      const folder = await Folder.findByIdAndUpdate(folderIds, {isActive: false}, {new: true});
+      const folder = await Folder.findByIdAndUpdate(folderIds, { isActive: false }, { new: true });
 
       if (!folder) {
 
@@ -245,7 +245,7 @@ exports.deleteSelectFolder = async (req, res) => {
 
     }
 
-    await Folder.updateMany({ _id: { $in: folderId } },{isActive: false}, {new: true});
+    await Folder.updateMany({ _id: { $in: folderId } }, { isActive: false }, { new: true });
 
     res.json({ message: 'Selected folders deactivated successfully' });
 
@@ -257,7 +257,7 @@ exports.deleteSelectFolder = async (req, res) => {
 
   }
 
- };
+};
 // //create folder api for sidebar folder
 // exports.createFolder = async (req, res) => {
 //     try {
@@ -332,7 +332,6 @@ exports.searchFolders = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
-}
+  }
 };
 
-router.get('/search',folderController.searchFolders)
