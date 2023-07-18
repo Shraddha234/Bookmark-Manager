@@ -3,6 +3,9 @@ const router = express.Router();
 const folderController = require('../controllers/folderController');
 const linkNameController = require('../controllers/linkNameController');
 const userController = require('../controllers/userController');
+const categoryController = require('../controllers/categoryController')
+const bookmarlController = require('../controllers/bookmarkController')
+
 
 // Folder routes
 router.get('/folders', folderController.getAllFolders);
@@ -45,6 +48,10 @@ router.put("/move", folderController.moveFolder);
 router.delete("/delete", folderController.deleteSelectFolder)
 
 
+//category and bookmark create
+router.post('/category',categoryController.createCategory);
+
+router.post('/bookmark', bookmarlController.createBookmark);
 
 
 //* user routes
