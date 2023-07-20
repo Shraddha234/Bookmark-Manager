@@ -55,7 +55,7 @@ router.get('/categories', categoryController.getAllCategories);
 
 router.put('/editCategory/:categoryId', categoryController.editCategory);
 
-router.delete('deletecategory/:categoryId', categoryController.deleteCategory);
+router.delete('/deletecategory/', categoryController.deleteSelectCategory);
 
 router.put('/moveCategory', categoryController.moveCategory);
 
@@ -69,8 +69,8 @@ router.put('/editBookmark/:bookmarkId', bookmarlController.editBookmark);
 
 router.delete('/deleteBookmark/:deleteId', bookmarlController.deleteBookmark);
 
-router.put('/moveBookmark', bookmarlController.moveBookmark);
-
+// router.put('/moveBookmark', bookmarlController.moveBookmark);
+ 
 //* user routes
 
 // To check Token Authentication 
