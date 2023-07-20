@@ -3,9 +3,16 @@ const Folder = require('../models/folderModel');
 // Controller methods for handling folder-related operations
 exports.getAllFolders = async (req, res) => {
   try {
-    const folders = await Folder.find();
-    res.json(folders);
+    if (typeof req.query.keyword === 'string') {  
+      const keyword = String(req.query.keyword); 
+      const folders = await Folder.find({ name: { $regex: keyword, $options: 'i' }, isActive: true });
+      res.json(folders);
+    } else {
+      const folders = await Folder.find({ isActive: true });
+      res.json(folders);
+    }
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };

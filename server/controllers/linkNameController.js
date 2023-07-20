@@ -1,17 +1,17 @@
 const LinkName = require('../models/linkNameModel');
 
-exports.getAllLinkNames = (req, res) => {
-    LinkName.find()
-        .populate("name")
-        .then((data) => {
-            res.send(data);
-        })
-        .catch((err) => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving users.",
-            });
-        });
+exports.getAllLinkNames = async(req, res) => {
+
+            try {
+              
+                const LinkNames = await LinkName.find({ isActive: true });
+                res.json(LinkNames);
+              
+            } catch (error) {
+              console.error(error);
+              res.status(500).json({ error: 'Server error' });
+            }
+          
 };
 // Add data to a Linkname
 exports.addLinkName = async (req, res) => {
@@ -49,6 +49,7 @@ exports.editLinkName = async (req, res) => {
 exports.deleteLinkName = async (req, res) => {
     try {
         const { linkNameId } = req.params;
+        
         const deletedLinkName = await LinkName.findByIdAndUpdate(linkNameId, {isActive: false}, {new: true});
         if (!deletedLinkName) {
             return res.status(404).json({ error: 'Link name not found' });
