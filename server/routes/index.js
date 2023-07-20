@@ -27,7 +27,7 @@ router.put("/editfolder/:folderId", folderController.editFolder);
 router.delete("deletefolder/:folderId", folderController.deleteFolder);
 
 //search folder API using keyword
-router.get('/search',folderController.searchFolders)
+router.get('/search', folderController.searchFolders)
 
 //LinkName create, edit, delete APIs 
 router.post('/link-names', linkNameController.addLinkName);
@@ -47,12 +47,29 @@ router.put("/move", folderController.moveFolder);
 //delete
 router.delete("/delete", folderController.deleteSelectFolder)
 
+//category create, edit, delete and move
 
-//category and bookmark create
-router.post('/category',categoryController.createCategory);
+router.post('/createCategory', categoryController.createCategory);
 
-router.post('/bookmark', bookmarlController.createBookmark);
+router.get('/categories', categoryController.getAllCategories);
 
+router.put('/editCategory/:categoryId', categoryController.editCategory);
+
+router.delete('deletecategory/:categoryId', categoryController.deleteCategory);
+
+router.put('/moveCategory', categoryController.moveCategory);
+
+//bookmark create,edit, delete and move
+
+router.post('/createBookmark', bookmarlController.createBookmark);
+
+router.get('/bookmarks', bookmarlController.getAllBookmarks);
+
+router.put('/editBookmark/:bookmarkId', bookmarlController.editBookmark);
+
+router.delete('/deleteBookmark/:deleteId', bookmarlController.deleteBookmark);
+
+router.put('/moveBookmark', bookmarlController.moveBookmark);
 
 //* user routes
 
