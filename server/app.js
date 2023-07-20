@@ -32,8 +32,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/mydb', {
         app.use('/', routes);
 
         // Start the server
-        app.listen(3000, () => {
-            console.log('Server started on port 3000');
+        app.listen(8081, () => {
+            console.log('Server started on port 8081');
 
             // Console the schema data after the server has started
             // console.log('Folder Schema:', Folder.schema);
