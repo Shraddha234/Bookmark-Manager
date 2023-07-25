@@ -1,5 +1,5 @@
 const Folder = require('../models/folderModel');
-
+const LinkName =require('../models/linkNameModel');
 // Controller methods for handling folder-related operations
 exports.getAllFolders = async (req, res) => {
   try {
