@@ -1,5 +1,3 @@
-//category model
-
 const mongoose = require('mongoose');
 const categorySchema = new mongoose.Schema({
     // _id: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -8,18 +6,6 @@ const categorySchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
-    parentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-    }
+    bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Bookmark' }],
 });
-module.exports = mongoose.model('Category', categorySchema); 
-// const mongoose = require('mongoose');
-
-// const folderSchema = new mongoose.Schema({
-//     // _id: { type: mongoose.Schema.Types.ObjectId, required: true },
-//     name: { type: String, required: true }
-// });
-
-// const Folder = mongoose.model('Folder', folderSchema);
-// module.exports = Folder;
+module.exports = mongoose.model('Category', categorySchema);

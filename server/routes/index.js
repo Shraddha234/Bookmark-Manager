@@ -59,7 +59,7 @@ router.delete('/deletecategory/', categoryController.deleteSelectCategory);
 
 router.put('/moveCategory', categoryController.moveCategory);
 
-//bookmark create,edit, delete and move
+//bookmark create,edit, delete, share and move
 
 router.post('/createBookmark', bookmarlController.createBookmark);
 
@@ -69,6 +69,10 @@ router.put('/editBookmark/:bookmarkId', bookmarlController.editBookmark);
 
 router.delete('/deleteBookmark/:deleteId', bookmarlController.deleteBookmark);
 
+router.post('/share/:categoryId/:bookmarkId', bookmarlController.shareBookmark);
+
+
+router.get('/view/:categoryId',bookmarlController.viewBookmark);
 // router.put('/moveBookmark', bookmarlController.moveBookmark);
  
 //* user routes

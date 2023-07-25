@@ -16,10 +16,11 @@ const bookmarkSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true,
-    }
+    },
+    userMail: {
+        type: String,
+    },
+    actions: { type: [String], enum: ['read', 'write', 'delete'] },
 });
-
 bookmarkSchema.plugin(mongooseAutopopulate)
-
 module.exports = mongoose.model('Bookmark', bookmarkSchema);
-

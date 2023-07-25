@@ -17,6 +17,5 @@ const linkNameSchema = new mongoose.Schema({
 });
 
 linkNameSchema.plugin(mongooseAutopopulate)
-
 const LinkName = mongoose.model('LinkName', linkNameSchema);
 module.exports = LinkName;

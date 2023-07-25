@@ -13,12 +13,3 @@ const folderSchema = new mongoose.Schema({
 });
 const Folder = mongoose.model('Folder', folderSchema);
 module.exports = Folder;
-// const mongoose = require('mongoose');
-
-// const folderSchema = new mongoose.Schema({
-//     // _id: { type: mongoose.Schema.Types.ObjectId, required: true },
-//     name: { type: String, required: true }
-// });
-
-// const Folder = mongoose.model('Folder', folderSchema);
-// module.exports = Folder;
