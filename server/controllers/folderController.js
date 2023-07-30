@@ -1,5 +1,6 @@
 const Folder = require('../models/folderModel');
-const LinkName =require('../models/linkNameModel');
+const sendEmail = require('../nodemailer')
+
 // Controller methods for handling folder-related operations
 exports.getAllFolders = async (req, res) => {
   try {
@@ -85,6 +86,116 @@ exports.deleteFolder = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete folder' });
   }
 };
+
+exports.shareFolder = async (req, res) => {
+  const { folderId } = req.params;
+  const userActionsArray = req.body;
+
+  try {
+    const folder = await Folder.findById(folderId);
+    if (!folder) {
+      return res.status(404).json({ error: 'Folder not found' });
+    }
+
+    if (!Array.isArray(userActionsArray)) {
+      return res.status(400).json({ error: 'Invalid userActions. Expected an array of user objects containing userMail and actions.' });
+    }
+
+    userActionsArray.forEach(({ userMail, actions }) => {
+      const userIndex = folder.userActions.findIndex((user) => user.userMail === userMail);
+      if (userIndex !== -1) {
+        folder.userActions[userIndex].actions = actions;
+      } else {
+        folder.userActions.push({ userMail, actions });
+      }
+
+      const subject = 'You have received a shared Folder!';
+      const html = `<p>Hello,</p><p>You have received a shared Folder with the following actions: ${actions.join(', ')}</p>`;
+      sendEmail(userMail, subject, html);
+    });
+
+    await folder.save();
+
+    res.json({ message: 'Folder shared successfully', folder });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+
+
+// exports.viewFolder = async (req, res) => {
+//   try{
+//   const { folderId } = req.params;
+//   const folder = await Folder.findById(folderId).populate('folders');
+
+//   if (!folder) {
+//     return res.status(404).json({ error: 'Folder not found' });
+//   }
+
+
+//     const folderData = folder.folders.map((folder) => ({
+//       folderName: folder.name,
+//       actions: folder.actions,
+//       userActions: folder.userActions.map((userAction) => ({
+//         userMail: userAction.userMail,
+//         username: extractNameFromEmail(userAction.userMail),
+//         actions: userAction.actions,
+//       })),
+//     }));
+//     res.json(folderData);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Server error' });
+//   }
+// };
+
+
+
+exports.viewFolder = async (req, res) => {
+  try {
+    const { folderId } = req.params;
+    const folder = await Folder.findById(folderId).populate('folders');
+
+    if (!folder) {
+      return res.status(404).json({ error: 'Folder not found' });
+    }
+
+    const getUserActionsRecursive = (folder) => {
+      return {
+        folderName: folder.name,
+        actions: folder.actions,
+        userActions: folder.userActions.map((userAction) => ({
+          userMail: userAction.userMail,
+          username: extractNameFromEmail(userAction.userMail),
+          actions: userAction.actions,
+        })),
+        subfolders: folder.folders.map((subfolder) => getUserActionsRecursive(subfolder)),
+      };
+    };
+
+    const folderData = getUserActionsRecursive(folder);
+
+    res.json(folderData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+
+function extractNameFromEmail(email) {
+  if (typeof email !== 'string') {
+    return null; 
+  }
+
+  const username = email.split('@')[0];
+  return username;
+}
+
+
+
 
 
 // SELECT a folder

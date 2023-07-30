@@ -26,13 +26,23 @@ router.put("/editfolder/:folderId", folderController.editFolder);
 //Delete folder routes
 router.delete("deletefolder/:folderId", folderController.deleteFolder);
 
+//share folder
+router.post('/shareFolder/:folderId', folderController.shareFolder);
+
+//view folder
+router.get('/viewFolder/:folderId', folderController.viewFolder);
+
+
 //search folder API using keyword
 router.get('/search', folderController.searchFolders)
 
-//LinkName create, edit, delete APIs 
-router.post('/link-names', linkNameController.addLinkName);
+//LinkName create, edit, delete, share and view APIs 
+router.post('/createLink', linkNameController.createLink);
 router.put('/link-names/:linkNameId', linkNameController.editLinkName);
 router.delete('/link-names/:linkNameId', linkNameController.deleteLinkName);
+router.post('/shareLink/:linkId', linkNameController.shareLink);
+router.get('/viewLink/:folderId/:linkId', linkNameController.viewLink);
+
 
 
 //Select Folder
@@ -59,7 +69,7 @@ router.delete('/deletecategory/', categoryController.deleteSelectCategory);
 
 router.put('/moveCategory', categoryController.moveCategory);
 
-//bookmark create,edit, delete, share and move
+//bookmark create,edit, delete and move
 
 router.post('/createBookmark', bookmarlController.createBookmark);
 
@@ -71,8 +81,8 @@ router.delete('/deleteBookmark/:deleteId', bookmarlController.deleteBookmark);
 
 router.post('/share/:categoryId/:bookmarkId', bookmarlController.shareBookmark);
 
+router.get('/view/:categoryId', bookmarlController.viewBookmark)
 
-router.get('/view/:categoryId',bookmarlController.viewBookmark);
 // router.put('/moveBookmark', bookmarlController.moveBookmark);
  
 //* user routes
@@ -88,6 +98,13 @@ router.post('/signup', userController.signUpController);
 
 // SSO Login Module Route
 router.post('/sso-login', userController.ssoLoginController);
+
+//add, edit and delete links without folderId
+router.post('/add',linkNameController.addLink);
+
+router.put('/edit/:linkNameId',linkNameController.editLink);
+
+router.delete('/deleteLink/:linkNameId',linkNameController.deleteLink)
 
 
 module.exports = router;
