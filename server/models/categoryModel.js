@@ -1,3 +1,5 @@
+// category model
+
 const mongoose = require('mongoose');
 const categorySchema = new mongoose.Schema({
     // _id: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -8,4 +10,5 @@ const categorySchema = new mongoose.Schema({
     },
     bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Bookmark' }],
 });
-module.exports = mongoose.model('Category', categorySchema);
+module.exports = mongoose.model('Category', categorySchema); 
+
