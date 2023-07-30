@@ -13,9 +13,27 @@ const linkNameSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true,
-    }
+    },
+    userActions: [
+        {
+          userMail: {
+            type: String,
+          },
+          actions: {
+            type: [
+              {
+                type: String,
+                enum: ['read', 'write', 'delete'],
+                default: 'read'
+              },
+            ],
+          },
+        },
+      ],
 });
 
 linkNameSchema.plugin(mongooseAutopopulate)
+
 const LinkName = mongoose.model('LinkName', linkNameSchema);
 module.exports = LinkName;
+
