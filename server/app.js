@@ -21,7 +21,7 @@ app.use(
     })
 );
 // Connect to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/mydb', {
+mongoose.connect('mongodb://127.0.0.1:27017/mybookmarkdb', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
