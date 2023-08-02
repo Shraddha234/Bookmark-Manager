@@ -1,5 +1,14 @@
 const Folder = require('../models/folderModel');
-const sendEmail = require('../nodemailer')
+const LinkName = require('../models/linkNameModel');
+const User = require('../models/userModel');
+const jwt = require('jsonwebtoken');
+const sendEmail = require('../nodemailer');
+const mongoose = require('mongoose');
+const { ObjectId } = require('mongoose');
+
+
+
+
 
 // Controller methods for handling folder-related operations
 exports.getAllFolders = async (req, res) => {
@@ -87,11 +96,22 @@ exports.deleteFolder = async (req, res) => {
   }
 };
 
+
+
+
 exports.shareFolder = async (req, res) => {
   const { folderId } = req.params;
   const userActionsArray = req.body;
-
+  
+  console.log('folderId:', folderId);
+  console.log('userActionsArray:', userActionsArray);
+  console.log('Request User:', req.user);
+  
+  const sharedBy = req.user && req.user.email ? req.user.email : null;
+  
+  console.log('sharedBy:', sharedBy);
   try {
+
     const folder = await Folder.findById(folderId);
     if (!folder) {
       return res.status(404).json({ error: 'Folder not found' });
@@ -114,9 +134,23 @@ exports.shareFolder = async (req, res) => {
       sendEmail(userMail, subject, html);
     });
 
+    folder.sharedBy = sharedBy;
+
     await folder.save();
 
-    res.json({ message: 'Folder shared successfully', folder });
+    const folderData = {
+      _id: folder._id,
+      folderName: folder.name,
+      actions: folder.actions,
+      userActions: folder.userActions.map((userAction) => ({
+        userMail: userAction.userMail,
+        username: extractNameFromEmail(userAction.userMail),
+        actions: userAction.actions,
+      })),
+      sharedBy: sharedBy,
+    };
+
+    res.json({ message: 'Folder shared successfully', folderData });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
@@ -125,31 +159,6 @@ exports.shareFolder = async (req, res) => {
 
 
 
-// exports.viewFolder = async (req, res) => {
-//   try{
-//   const { folderId } = req.params;
-//   const folder = await Folder.findById(folderId).populate('folders');
-
-//   if (!folder) {
-//     return res.status(404).json({ error: 'Folder not found' });
-//   }
-
-
-//     const folderData = folder.folders.map((folder) => ({
-//       folderName: folder.name,
-//       actions: folder.actions,
-//       userActions: folder.userActions.map((userAction) => ({
-//         userMail: userAction.userMail,
-//         username: extractNameFromEmail(userAction.userMail),
-//         actions: userAction.actions,
-//       })),
-//     }));
-//     res.json(folderData);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Server error' });
-//   }
-// };
 
 
 
@@ -453,3 +462,39 @@ exports.searchFolders = async (req, res) => {
   }
 };
 
+exports.checkTokenAuthentication = (req, res) => {
+  try {
+    console.log(req.user); 
+
+    return res.status(200).send({ message: "user is valid", data: "Authenticated", status: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
+
+//delete useractions from folder
+exports.deleteUserActionFromFolder = async (req, res) => {
+  try {
+    const { folderId, userActionId } = req.params;
+    const folder = await Folder.findById(folderId);
+    if (!folder) {
+      return res.status(404).json({ error: 'Folder not found' });
+    }
+    // Find the index of the user action with the given userActionId
+    const userActionIndex = folder.userActions.findIndex(
+      (userAction) => userAction._id.toString() === userActionId
+    );
+    if (userActionIndex === -1) {
+      return res.status(404).json({ error: 'User action not found in the folder' });
+    }
+
+    // Remove the user action from the folder's userActions array
+    folder.userActions.splice(userActionIndex, 1);
+    await folder.save();
+    res.json({ message: 'User action deleted from folder successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
