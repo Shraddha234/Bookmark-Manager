@@ -5,7 +5,8 @@ const linkNameController = require('../controllers/linkNameController');
 const userController = require('../controllers/userController');
 const categoryController = require('../controllers/categoryController')
 const bookmarlController = require('../controllers/bookmarkController')
-
+const sharedController = require('../controllers/sharedController');
+const authenticateUser = require('../middleware/authMiddleware');
 
 // Folder routes
 router.get('/folders', folderController.getAllFolders);
@@ -27,7 +28,7 @@ router.put("/editfolder/:folderId", folderController.editFolder);
 router.delete("deletefolder/:folderId", folderController.deleteFolder);
 
 //share folder
-router.post('/shareFolder/:folderId', folderController.shareFolder);
+router.post('/shareFolder/:folderId', authenticateUser, folderController.shareFolder);
 
 //view folder
 router.get('/viewFolder/:folderId', folderController.viewFolder);
@@ -37,10 +38,10 @@ router.get('/viewFolder/:folderId', folderController.viewFolder);
 router.get('/search', folderController.searchFolders)
 
 //LinkName create, edit, delete, share and view APIs 
-router.post('/createLink', linkNameController.createLink);
+router.post('/link-names', linkNameController.addLinkName);
 router.put('/link-names/:linkNameId', linkNameController.editLinkName);
 router.delete('/link-names/:linkNameId', linkNameController.deleteLinkName);
-router.post('/shareLink/:linkId', linkNameController.shareLink);
+router.post('/shareLink/:linkId', authenticateUser, linkNameController.shareLink);
 router.get('/viewLink/:folderId/:linkId', linkNameController.viewLink);
 
 
@@ -56,6 +57,12 @@ router.put("/move", folderController.moveFolder);
 
 //delete
 router.delete("/delete", folderController.deleteSelectFolder)
+
+//delete useraction from folder
+router.delete('/folder/:folderId/useraction/:userActionId', folderController.deleteUserActionFromFolder);
+
+//delete useraction from linkname
+router.delete('/link/:linkId/useraction/:userActionId', linkNameController.deleteUserActionFromLink);
 
 //category create, edit, delete and move
 
@@ -105,6 +112,16 @@ router.post('/add',linkNameController.addLink);
 router.put('/edit/:linkNameId',linkNameController.editLink);
 
 router.delete('/deleteLink/:linkNameId',linkNameController.deleteLink)
+
+router.post('/shareLinkNoId/:linkId',linkNameController.shareLinkNoFolderId)
+
+router.get('/viewLinkNoId', linkNameController.viewLinkNoFolderId)
+
+router.post('/checkTokenAuthentication', folderController.checkTokenAuthentication);
+
+router.get('/shared',authenticateUser, sharedController.viewShared);
+
+
 
 
 module.exports = router;
