@@ -132,7 +132,7 @@ exports.verifyJwt = (req, res, next) => {
         // return res.send();
         return res.send({ data: "Token is not found", message: "user is not valid", status: false });
     }
-    jwt.verify(token, "jwt-key", (err, decode) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, decode) => {
         if (err) {
             return res.send({ data: "Not Authenticated", message: "user is not valid", status: false });
         }
