@@ -200,8 +200,3 @@ function extractNameFromEmail(email){
     return username;
 }
   
-   
-
-
-
-
