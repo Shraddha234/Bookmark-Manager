@@ -44,7 +44,7 @@ router.delete('/link-names/:linkNameId', linkNameController.deleteLinkName);
 router.post('/shareLink/:linkId', authenticateUser, linkNameController.shareLink);
 router.get('/viewLink/:folderId/:linkId', linkNameController.viewLink);
 
-
+router.get('/viewAccessByLinkId/:linkNameId', linkNameController.ViewAccess);
 
 //Select Folder
 router.put("/select", folderController.selectFolder);
