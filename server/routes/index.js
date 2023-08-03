@@ -113,7 +113,7 @@ router.put('/edit/:linkNameId',linkNameController.editLink);
 
 router.delete('/deleteLink/:linkNameId',linkNameController.deleteLink)
 
-router.post('/shareLinkNoId/:linkId',linkNameController.shareLinkNoFolderId)
+router.post('/shareLinkNoId/:linkId',authenticateUser,linkNameController.shareLinkNoFolderId)
 
 router.get('/viewLinkNoId', linkNameController.viewLinkNoFolderId)
 

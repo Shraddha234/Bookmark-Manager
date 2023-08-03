@@ -237,7 +237,7 @@ exports.addLink = async (req, res) => {
 exports.shareLinkNoFolderId = async (req, res) => {
     const { linkId } = req.params;
     const userActionsArray = req.body;
-    const sharedBy = req.user ? req.user._id : null;
+    const sharedBy = req.user ? req.user.email : null;
   
     try {
       if (!isValidObjectId(linkId)) {
