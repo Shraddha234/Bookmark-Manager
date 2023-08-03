@@ -174,6 +174,7 @@ exports.viewFolder = async (req, res) => {
     const getUserActionsRecursive = (folder) => {
       return {
         folderName: folder.name,
+        _id:userAction._id,
         actions: folder.actions,
         userActions: folder.userActions.map((userAction) => ({
           userMail: userAction.userMail,
