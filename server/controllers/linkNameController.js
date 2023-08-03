@@ -325,6 +325,20 @@ exports.deleteUserActionFromLink = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
     }
   };
+
+  exports.ViewAccess = async (req, res) => {
+    try {
+      const { linkNameId } = req.params;
+      const link = await LinkName.findById(linkNameId);
+      if (!link) {
+        return res.status(404).json({ error: "Link name not found" });
+      }
+      res.json({ userActions: link.userActions });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete link name" });
+    }
+  };
+ 
     
 
 
